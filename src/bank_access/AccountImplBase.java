@@ -5,7 +5,7 @@ public abstract class AccountImplBase {
 
 	public abstract double getBalance();
 
-	public static AccountImplBase narrowCast(Object o) { /* TODO */
-		return null;
+	public static AccountImplBase narrowCast(Object o) {
+		return (AccountImplBase) o;
 	}
 }

@@ -3,11 +3,14 @@ package server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+
+import bank_access.Account;
+
+import mware_lib.ISkeleton;
 
 import objects.MethodCall;
 import objects.MethodReturn;
@@ -15,12 +18,13 @@ import objects.Person;
 
 public class Server {
 
-	private Map<String, Object> objects = new HashMap<String, Object>();
+	private Map<String, ISkeleton> objects = new HashMap<String, ISkeleton>();
 
 	public static void main(String[] args) {
-		Person p = new Person();
+		ISkeleton acc = new Account();
+		
 		Server s = new Server();
-		s.objects.put("Peter", p);
+		s.objects.put(acc.getId(), acc);
 		s.loop();
 	}
 
@@ -60,10 +64,9 @@ public class Server {
 		try {
 			methodCall = (MethodCall) oin.readObject();
 
-			Object o = this.objects.get(methodCall.id);
-			Method m = o.getClass().getMethod(methodCall.method);
-			Object antwort = m.invoke(o, methodCall.args);
-			ret = new MethodReturn(antwort);
+			ISkeleton o = this.objects.get(methodCall.id);
+			System.out.println(o.getClass().getName().toString() + "." + methodCall.method);
+			ret = o.call(methodCall);
 		} catch (Exception e) {
 			ret = new MethodReturn(e);
 		}

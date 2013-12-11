@@ -5,9 +5,17 @@ package mware_lib;
  * Singleton
  */
 public class ObjectBroker {
+	
+	private static ObjectBroker objectBroker = null;
+	private NameService nameService = new NameServiceImpl();
+		
+	private ObjectBroker(String serviceName, int port) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/** * @return an Implementation for a local NameService */
-	public NameService getNameService() { /* TODO */
-		return null;
+	public NameService getNameService() {
+		return nameService;
 	}
 
 	/**
@@ -23,7 +31,10 @@ public class ObjectBroker {
 	 * NameService is listening at * @return an ObjectBroker Interface to
 	 * Nameservice
 	 */
-	public static ObjectBroker init(String serviceName, int port) { /* TODO */
-		return null;
+	public static ObjectBroker init(String serviceName, int port) {
+		if (objectBroker == null) {
+			objectBroker = new ObjectBroker(serviceName, port);
+		}
+		return objectBroker;
 	}
 }
