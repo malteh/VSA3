@@ -11,7 +11,7 @@ public class ServerApplikation {
 		int port = 1234;
 		ObjectBroker ob = ObjectBroker.init(host, port);
 		NameService ns = ob.getNameService();
-		Account konto = new Account();
+		AccountProxy konto = new AccountProxy();
 		ns.rebind((Object) konto, konto.getId());
 		ob.shutDown();
 	}

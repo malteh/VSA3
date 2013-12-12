@@ -5,14 +5,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import bank_access.Account;
+import bank_access.AccountProxy;
 import bank_access.OverdraftException;
 
 public class Bank_access_test {
 
 	@Test
 	public void account() {
-		Account a = new Account();
+		AccountProxy a = new AccountProxy();
 		Assert.assertEquals(0.0, a.getBalance());
 		try {
 			a.transfer(123.0);
@@ -23,7 +23,7 @@ public class Bank_access_test {
 
 	@Test
 	public void account_fail() {
-		Account a = new Account();
+		AccountProxy a = new AccountProxy();
 		Assert.assertEquals(0.0, a.getBalance());
 		try {
 			a.transfer(-123.0);

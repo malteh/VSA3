@@ -8,24 +8,23 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-import bank_access.Account;
+import bank_access.AccountProxy;
 
 import mware_lib.ISkeleton;
+import mware_lib.MethodCall;
+import mware_lib.MethodReturn;
 
-import objects.MethodCall;
-import objects.MethodReturn;
-import objects.Person;
 
 public class Server {
 
 	private Map<String, ISkeleton> objects = new HashMap<String, ISkeleton>();
 
 	public static void main(String[] args) {
-		ISkeleton acc = new Account();
-		
-		Server s = new Server();
-		s.objects.put(acc.getId(), acc);
-		s.loop();
+//		ISkeleton acc = new AccountProxy();
+//		
+//		Server s = new Server();
+//		s.objects.put(acc.getId(), acc);
+//		s.loop();
 	}
 
 	public void loop() {

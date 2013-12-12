@@ -1,4 +1,4 @@
-package objects;
+package mware_lib;
 
 import java.io.Serializable;
 
