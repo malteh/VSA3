@@ -6,37 +6,33 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class Connection implements IConnection {
+public abstract class Connection implements IConnection {
 
 	Socket mySock;
 	ObjectInputStream oin;
 	OutputStream out;
 	ObjectOutputStream oout;
-
+	
+	protected void setSocket(Socket s) throws IOException {
+		mySock = s;
+		out = mySock.getOutputStream();
+		oout = new ObjectOutputStream(out);
+		oin = new ObjectInputStream(mySock.getInputStream());
+	}
+	
 	@Override
-	public void open(String host, int port) {
-
-		try {
-			mySock = new Socket(host, port);
-			out = mySock.getOutputStream();
-			oout = new ObjectOutputStream(out);
-			oin = new ObjectInputStream(mySock.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void send(Object o) throws IOException {
+		oout.writeObject(o);
 	}
 
 	@Override
-	public Object sendReceive(Object o) {
+	public Object receive() throws IOException {
 		Object ret = null;
-
 		try {
-			oout.writeObject(o);
 			ret = oin.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e.getMessage());
 		}
-
 		return ret;
 	}
 
@@ -47,7 +43,6 @@ public class Connection implements IConnection {
 			out.close();
 			mySock.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

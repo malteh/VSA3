@@ -8,12 +8,11 @@ public class ServerApplikation {
 
 	public static void main(String[] args) {
 		String host = "localhost";
-		int port = 1234;
+		int port = 22334;
 		ObjectBroker ob = ObjectBroker.init(host, port);
 		NameService ns = ob.getNameService();
 		AccountProxy konto = new AccountProxy();
-		ns.rebind((Object) konto, konto.getId());
+		ns.rebind((Object) konto, "1");
 		ob.shutDown();
 	}
-
 }

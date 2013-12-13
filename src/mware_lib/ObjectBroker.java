@@ -1,6 +1,8 @@
 package mware_lib;
 
-import connection.Connection;
+import java.io.IOException;
+
+import connection.ClientConnection;
 import connection.IConnection;
 
 /**
@@ -10,11 +12,15 @@ import connection.IConnection;
 public class ObjectBroker {
 	
 	private static ObjectBroker objectBroker = null;
+
 	private NameService nameService;
-	private static final IConnection conn = new Connection();
-	
+
 	private ObjectBroker(String serviceName, int port) {
-		this.nameService = new NameServiceImpl();
+		try {
+			this.nameService = new NameServiceLocal(serviceName, port);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/** * @return an Implementation for a local NameService */
@@ -27,7 +33,7 @@ public class ObjectBroker {
 	 * process
 	 */
 	public void shutDown() {
-		
+		//conn.close();
 	}
 
 	/**
@@ -37,16 +43,21 @@ public class ObjectBroker {
 	 * Nameservice
 	 */
 	public static ObjectBroker init(String serviceName, int port) {
-		conn.open(serviceName, port);
 		if (objectBroker == null) {
 			objectBroker = new ObjectBroker(serviceName, port);
 		}
 		return objectBroker;
 	}
-	
 
 	public static MethodReturn call(MethodCall method) {
-		MethodReturn mr = (MethodReturn) conn.sendReceive(method);
+		IConnection conn = new ClientConnection(host, port);
+		MethodReturn mr;
+		try {
+			conn.send(method);
+			mr = (MethodReturn) conn.receive();
+		} catch (IOException e) {
+			mr = new MethodReturn(e);
+		}
 		return mr;
 	}
 }

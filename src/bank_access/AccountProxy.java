@@ -1,17 +1,19 @@
 package bank_access;
 
-import mware_lib.Id;
+import java.io.Serializable;
+
 import mware_lib.MethodCall;
 import mware_lib.MethodReturn;
 import mware_lib.ObjectBroker;
 
-public class AccountProxy extends AccountImplBase {
+public class AccountProxy extends AccountImplBase implements Serializable {
+
+	private static final long serialVersionUID = 727543035277413679L;
 
 	private final String id;
 
-	public AccountProxy() {
-		super();
-		id = Id.getNewId();
+	public AccountProxy(String id) {
+		this.id = id;
 	}
 
 	@Override

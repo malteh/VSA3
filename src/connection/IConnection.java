@@ -1,7 +1,9 @@
 package connection;
 
+import java.io.IOException;
+
 public interface IConnection {
-	public void open(String host, int port);
-	public Object sendReceive(Object o);
+	public void send(Object o) throws IOException;
+	public Object receive() throws IOException;
 	public void close();
 }

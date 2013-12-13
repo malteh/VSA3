@@ -7,6 +7,7 @@ public class MethodReturn implements Serializable {
 	private static final long serialVersionUID = 5131104326536867270L;
 	public final Exception exception;
 	public final Object value;
+	public ObjectRef ref;
 	
 	public MethodReturn(Exception exception) {
 		this.exception = exception;
