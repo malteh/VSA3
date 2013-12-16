@@ -12,6 +12,14 @@ public class Logger {
 		case "console":
 			logger = new ConsoleLogger();
 			break;
+		case "none":
+			logger = new ILogger() {
+				@Override
+				public void log(String message) {
+					// do nothing
+				}
+			};
+			break;
 		default:
 			break;
 		}

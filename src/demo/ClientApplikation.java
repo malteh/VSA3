@@ -15,13 +15,15 @@ public class ClientApplikation {
 		Object gor = ns.resolve("1");
 
 		AccountImplBase account = AccountImplBase.narrowCast(gor);
-System.out.println(account);
+		System.out.println(account);
 		try {
 			account.transfer(300.78);
 		} catch (OverdraftException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println(account.getBalance());
 
+		ob.shutDown();
 	}
-
 }

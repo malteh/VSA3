@@ -15,8 +15,14 @@ public class MethodCall implements Serializable {
 		this.args = args;
 	}
 
+	public MethodCall(String id, String method) {
+		this.id = id;
+		this.method = method;
+		this.args = new Object[] {};
+	}
+
 	@Override
 	public String toString() {
-		return method + "(" + Arrays.toString(args) + ")";
+		return "(" + id + ")." + method + "(" + Arrays.toString(args) + ")";
 	}
 }
