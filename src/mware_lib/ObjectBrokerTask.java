@@ -7,11 +7,12 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 public class ObjectBrokerTask extends Thread {
 
-	private static final ConfigReader cr = ConfigReader.getConfigReader("middleware.config");
-	private static final ILogger logger = Logger.getLogger(cr.read("LOG_METHOD"));
+	private static final ConfigReader cr = ConfigReader
+			.getConfigReader("middleware.config");
+	private static final ILogger logger = Logger.getLogger(cr
+			.read("LOG_METHOD"));
 
 	private int remainingClients = cr.readInt("MAX_CLIENTS");
 	private final ObjectBroker ob;
@@ -37,7 +38,6 @@ public class ObjectBrokerTask extends Thread {
 
 	@Override
 	public void run() {
-		logger.log("OB port " + server.getLocalPort());
 		ob.setPort(server.getLocalPort());
 		while (!isInterrupted()) {
 			if (remainingClients > 0) {
@@ -85,11 +85,11 @@ public class ObjectBrokerTask extends Thread {
 				ObjectInputStream oin = new ObjectInputStream(
 						s.getInputStream());
 				MethodCall mc = (MethodCall) oin.readObject();
-				logger.log(mc.toString());
+				logger.log("ObjectBrokerTask: Call: " + mc.toString());
 				ISkeleton ip = ((IProxy) ob.getNameService().resolve(mc.id))
 						.toSkeleton();
 				MethodReturn mr = ip.call(mc);
-				logger.log(mr.toString());
+				logger.log("ObjectBrokerTask: Return: " + mr.toString());
 				OutputStream out = s.getOutputStream();
 				ObjectOutputStream oout = new ObjectOutputStream(out);
 				oout.writeObject(mr);

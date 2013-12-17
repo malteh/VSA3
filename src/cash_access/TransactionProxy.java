@@ -31,7 +31,7 @@ public class TransactionProxy extends TransactionImplBase implements Serializabl
 	@Override
 	public void deposit(String accountId, double amount)
 			throws InvalidParamException {
-		MethodCall mc = new MethodCall(ref.id, "deposit", new Object[] {amount});
+		MethodCall mc = new MethodCall(ref.id, "deposit", new Object[] {accountId,amount});
 		MethodReturn mr = ObjectBroker.call(mc, getObjectRef());
 		
 		if (mr.exception != null && mr.exception instanceof InvalidParamException) {
@@ -59,6 +59,9 @@ public class TransactionProxy extends TransactionImplBase implements Serializabl
 	public double getBalance(String accountId) throws InvalidParamException {
 		MethodCall mc = new MethodCall(ref.id, "getBalance", new Object[] {accountId});
 		MethodReturn mr = ObjectBroker.call(mc, getObjectRef());
+		
+		if (mr.exception instanceof InvalidParamException)
+		
 		if (mr.exception != null) {
 			throw (RuntimeException) mr.exception;
 		}

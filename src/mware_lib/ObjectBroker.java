@@ -2,16 +2,17 @@ package mware_lib;
 
 import java.io.IOException;
 
-
 /**
  * * core of the middleware: * Maintains a Reference to the NameService *
  * Singleton
  */
 public class ObjectBroker {
 
-	private static final ConfigReader cr = ConfigReader.getConfigReader("middleware.config");
+	private static final ConfigReader cr = ConfigReader
+			.getConfigReader("middleware.config");
+	private static final ILogger logger = Logger.getLogger(cr
+			.read("LOG_METHOD"));
 	private static ObjectBroker objectBroker = null;
-	private static final ILogger logger = Logger.getLogger(cr.read("LOG_METHOD"));
 
 	private final NameService nameService;
 	private IConnection conn;
@@ -72,7 +73,11 @@ public class ObjectBroker {
 		IConnection c = new Connection(ref.host, ref.port);
 		MethodReturn mr;
 		try {
+			logger.log(String.format("ObjectBroker: %s an %s gesendet", method,
+					ref));
 			mr = (MethodReturn) c.sendReceive(method);
+			logger.log(String.format("ObjectBroker: %s von %s empfangen", mr,
+					ref));
 		} catch (IOException e) {
 			mr = new MethodReturn(e);
 		}
