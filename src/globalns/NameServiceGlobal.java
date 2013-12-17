@@ -1,4 +1,4 @@
-package demo;
+package globalns;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,15 +11,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import tools.ConfigReader;
-import log.ILogger;
-import log.Logger;
-import mware_lib.ISkeleton;
-import mware_lib.MethodCall;
-import mware_lib.MethodReturn;
 
-public class NameServiceGlobal extends Thread implements ISkeleton,
-		INameServiceGlobal {
+public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 
 	private static final ConfigReader cr = ConfigReader.getConfigReader("global_nameservice.config");
 	private static final int defaultPort = cr.readInt("DEFAULT_GLOBAL_NS_PORT");
@@ -28,7 +21,7 @@ public class NameServiceGlobal extends Thread implements ISkeleton,
 	public static void main(String[] args) {
 		Integer port = (args.length > 0) ? Integer.parseInt(args[0])
 				: defaultPort;
-		logger.log("NameServiceGlobal gestartet auf Port " + port.toString() + ", maximal " + cr.readInt("MAX_CLIENTS") + " Clients möglich");
+		logger.log("NameServiceGlobal gestartet auf Port " + port.toString() + ", maximal " + cr.readInt("MAX_CLIENTS") + " Clients mï¿½glich");
 		NameServiceGlobal nsg = null;
 		try {
 			nsg = new NameServiceGlobal(port);
@@ -90,7 +83,6 @@ public class NameServiceGlobal extends Thread implements ISkeleton,
 		return objects.get(name);
 	}
 
-	@Override
 	public MethodReturn call(MethodCall mc) {
 		logger.log(mc.toString());
 		try {

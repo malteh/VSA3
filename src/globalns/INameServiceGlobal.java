@@ -1,4 +1,4 @@
-package demo;
+package globalns;
 
 public interface INameServiceGlobal {
 	public void increaseCounter();

@@ -2,11 +2,6 @@ package mware_lib;
 
 import java.io.IOException;
 
-import tools.ConfigReader;
-import log.ILogger;
-import log.Logger;
-import connection.Connection;
-import connection.IConnection;
 
 /**
  * * core of the middleware: * Maintains a Reference to the NameService *

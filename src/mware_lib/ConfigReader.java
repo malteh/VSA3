@@ -1,4 +1,4 @@
-package tools;
+package mware_lib;
 
 import java.io.File;
 import java.io.FileReader;

@@ -1,4 +1,4 @@
-package tools;
+package mware_lib;
 
 import java.net.*;
 import java.util.Enumeration;

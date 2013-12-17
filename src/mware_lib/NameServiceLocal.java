@@ -5,8 +5,6 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
-import tools.IPTools;
-import connection.IConnection;
 
 public class NameServiceLocal extends NameService {
 	private final Map<String, Object> objects = new HashMap<String, Object>();

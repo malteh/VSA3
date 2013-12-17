@@ -1,4 +1,4 @@
-package log;
+package globalns;
 
 public class ConsoleLogger implements ILogger {
 

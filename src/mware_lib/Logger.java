@@ -1,4 +1,4 @@
-package log;
+package mware_lib;
 
 public class Logger {
 	
