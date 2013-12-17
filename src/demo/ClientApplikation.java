@@ -8,7 +8,7 @@ import mware_lib.ObjectBroker;
 public class ClientApplikation {
 
 	public static void main(String[] args) {
-		String host = "localhost";
+		String host = "Malte-Laptop";
 		int port = 22334;
 		ObjectBroker ob = ObjectBroker.init(host, port);
 		NameService ns = ob.getNameService();

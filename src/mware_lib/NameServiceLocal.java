@@ -1,10 +1,11 @@
 package mware_lib;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
+
+import tools.IPTools;
 import connection.IConnection;
 
 public class NameServiceLocal extends NameService {
@@ -22,16 +23,16 @@ public class NameServiceLocal extends NameService {
 		if (!objects.containsKey(name)) {
 			String host = "localhost";
 			try {
-				host = InetAddress.getLocalHost().getHostAddress();
-			} catch (UnknownHostException e1) {
-				e1.printStackTrace();
+				host = IPTools.getIP();
+			} catch (SocketException e) {
+				throw new RuntimeException(e.getMessage());
 			}
 			ObjectRef ref = new ObjectRef(name, host, obPort);
 			MethodCall mc = new MethodCall(name, "rebind", new Object[] {ref, name});
 			try {
 				conn.sendReceive(mc);
 			} catch (IOException e) {
-				throw new RuntimeException("rebind nicht möglich");
+				throw new RuntimeException("rebind nicht mï¿½glich");
 			}
 		}
 		
@@ -45,11 +46,11 @@ public class NameServiceLocal extends NameService {
 			try {
 				MethodReturn mr =  (MethodReturn) conn.sendReceive(mc);
 				if (mr.exception != null || mr.value == null) {
-					throw new RuntimeException("resolve(name) nicht möglich"); 
+					throw new RuntimeException("resolve(name) nicht mï¿½glich"); 
 				}
 				objects.put(name, mr.value);
 			} catch (IOException e) {
-				throw new RuntimeException("resolve nicht möglich");
+				throw new RuntimeException("resolve nicht mï¿½glich");
 			}
 		}
 		return objects.get(name);
