@@ -1,10 +1,8 @@
 package demo;
 
 import mware_lib.IProxy;
-import mware_lib.ISkeleton;
 import mware_lib.ObjectRef;
 import bank_access.AccountImplBase;
-import bank_access.AccountSkeleton;
 import bank_access.OverdraftException;
 
 public class Account extends AccountImplBase implements IProxy {
@@ -27,10 +25,5 @@ public class Account extends AccountImplBase implements IProxy {
 	@Override
 	public ObjectRef getObjectRef() {
 		return null;
-	}
-	
-	@Override
-	public ISkeleton toSkeleton() {
-		return new AccountSkeleton(this);
 	}
 }

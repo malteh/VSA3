@@ -1,8 +1,10 @@
 package cash_access;
 
+import mware_lib.IProxy;
+import mware_lib.ISkeleton;
 import mware_lib.ObjectRef;
 
-public abstract class TransactionImplBase {
+public abstract class TransactionImplBase implements IProxy {
 	public abstract void deposit(String accountId, double amount)
 			throws InvalidParamException;
 
@@ -14,5 +16,10 @@ public abstract class TransactionImplBase {
 
 	public static TransactionImplBase narrowCast(Object o) {
 		return new TransactionProxy(ObjectRef.fromObjectRep(o));
+	}
+	
+	@Override
+	public ISkeleton toSkeleton() {
+		return new TransactionSkeleton(this);
 	}
 }
