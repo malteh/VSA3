@@ -1,13 +1,10 @@
 package log;
 
-import tools.ConfigReader;
-
 public class Logger {
 	
 	public static ILogger logger = null;
 	
-	private static void init() {
-		String logMethod = ConfigReader.read("LOG_METHOD");
+	private static void init(String logMethod) {
 		switch (logMethod) {
 		case "console":
 			logger = new ConsoleLogger();
@@ -25,8 +22,8 @@ public class Logger {
 		}
 	}
 	
-	public static ILogger getLogger() {
-		if (logger == null) init();
+	public static ILogger getLogger(String logMethod) {
+		if (logger == null) init(logMethod);
 		return logger;
 	}
 }

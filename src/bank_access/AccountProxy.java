@@ -1,8 +1,8 @@
 package bank_access;
 
 import java.io.Serializable;
-
 import mware_lib.IProxy;
+import mware_lib.ISkeleton;
 import mware_lib.MethodCall;
 import mware_lib.MethodReturn;
 import mware_lib.ObjectBroker;
@@ -43,5 +43,10 @@ public class AccountProxy extends AccountImplBase implements Serializable, IProx
 	@Override
 	public ObjectRef getObjectRef() {
 		return ref;
+	}
+	
+	@Override
+	public ISkeleton toSkeleton() {
+		return new AccountSkeleton(this);
 	}
 }

@@ -21,14 +21,14 @@ import mware_lib.MethodReturn;
 public class NameServiceGlobal extends Thread implements ISkeleton,
 		INameServiceGlobal {
 
-	private static final int defaultPort = ConfigReader
-			.readInt("DEFAULT_GLOBAL_NS_PORT");
-	private static final ILogger logger = Logger.getLogger();
+	private static final ConfigReader cr = ConfigReader.getConfigReader("global_nameservice.config");
+	private static final int defaultPort = cr.readInt("DEFAULT_GLOBAL_NS_PORT");
+	private static final ILogger logger = Logger.getLogger(cr.read("LOG_METHOD"));
 
 	public static void main(String[] args) {
 		Integer port = (args.length > 0) ? Integer.parseInt(args[0])
 				: defaultPort;
-		logger.log("NameServiceGlobal gestartet auf Port " + port.toString() + ", maximal " + ConfigReader.readInt("MAX_CLIENTS") + " Clients möglich");
+		logger.log("NameServiceGlobal gestartet auf Port " + port.toString() + ", maximal " + cr.readInt("MAX_CLIENTS") + " Clients möglich");
 		NameServiceGlobal nsg = null;
 		try {
 			nsg = new NameServiceGlobal(port);
@@ -52,7 +52,7 @@ public class NameServiceGlobal extends Thread implements ISkeleton,
 
 	private final ServerSocket s;
 	private final Map<String, Object> objects = new ConcurrentHashMap<String, Object>();
-	private int remainingClients = ConfigReader.readInt("MAX_CLIENTS");
+	private int remainingClients = cr.readInt("MAX_CLIENTS");
 	
 	public NameServiceGlobal(int port) throws IOException {
 		s = new ServerSocket(port);

@@ -9,7 +9,7 @@ public class ObjectRef implements Serializable {
 
 	public ObjectRef(String id, String host, int port) {
 		this.id = id;
-		this.host = "localhost";
+		this.host = host;
 		this.port = port;
 	}
 

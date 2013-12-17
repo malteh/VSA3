@@ -1,6 +1,8 @@
 package mware_lib;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import connection.IConnection;
@@ -18,10 +20,16 @@ public class NameServiceLocal extends NameService {
 	@Override
 	public void rebind(Object servant, String name) {
 		if (!objects.containsKey(name)) {
-			ObjectRef ref = new ObjectRef(name, conn.getLocalAddress(), obPort);
+			String host = "localhost";
+			try {
+				host = InetAddress.getLocalHost().getHostAddress();
+			} catch (UnknownHostException e1) {
+				e1.printStackTrace();
+			}
+			ObjectRef ref = new ObjectRef(name, host, obPort);
 			MethodCall mc = new MethodCall(name, "rebind", new Object[] {ref, name});
 			try {
-				conn.send(mc);
+				conn.sendReceive(mc);
 			} catch (IOException e) {
 				throw new RuntimeException("rebind nicht möglich");
 			}

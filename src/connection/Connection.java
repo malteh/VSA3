@@ -18,16 +18,6 @@ public class Connection implements IConnection {
 	}
 
 	@Override
-	public void send(Object o) throws IOException {
-		Socket s = new Socket(host, port);
-		OutputStream out = s.getOutputStream();
-		ObjectOutputStream oout = new ObjectOutputStream(out);
-		oout.writeObject(o);
-		out.close();
-		s.close();
-	}
-
-	@Override
 	public Object sendReceive(Object o) throws IOException {
 		Object ret = null;
 		try {

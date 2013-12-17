@@ -16,7 +16,7 @@ public class DemoNSOpponent {
 		IConnection c = new Connection("localhost", 22334);
 		MethodCall m = new MethodCall("1", "rebind", new Object[] { "asd" });
 		try {
-			c.send(m);
+			c.sendReceive(m);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
