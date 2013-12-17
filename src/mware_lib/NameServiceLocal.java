@@ -26,9 +26,8 @@ public class NameServiceLocal extends NameService {
 				throw new RuntimeException(e.getMessage());
 			}
 			ObjectRef ref = new ObjectRef(name, host, obPort);
-			MethodCall mc = new MethodCall(name, "rebind", new Object[] {ref, name});
 			try {
-				conn.sendReceive(mc);
+				conn.sendReceive("rebind;"+name+";"+ref.stringRep());
 			} catch (IOException e) {
 				throw new RuntimeException("rebind nicht m�glich");
 			}
@@ -40,13 +39,12 @@ public class NameServiceLocal extends NameService {
 	@Override
 	public Object resolve(String name) {
 		if (!objects.containsKey(name)) {
-			MethodCall mc = new MethodCall(name, "resolve", new Object[] {name});
 			try {
-				MethodReturn mr =  (MethodReturn) conn.sendReceive(mc);
-				if (mr.exception != null || mr.value == null) {
+				Object mr = conn.sendReceive("resolve;"+name+";");
+				if (mr == null) {
 					throw new RuntimeException("resolve(name) nicht m�glich"); 
 				}
-				objects.put(name, mr.value);
+				objects.put(name, mr);
 			} catch (IOException e) {
 				throw new RuntimeException("resolve nicht m�glich");
 			}

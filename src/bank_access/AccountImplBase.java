@@ -8,6 +8,6 @@ public abstract class AccountImplBase {
 	public abstract double getBalance();
 
 	public static AccountImplBase narrowCast(Object o) {
-		return new AccountProxy((ObjectRef) o);
+		return new AccountProxy(ObjectRef.fromObjectRep(o));
 	}
 }

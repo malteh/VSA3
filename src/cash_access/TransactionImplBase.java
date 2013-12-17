@@ -13,6 +13,6 @@ public abstract class TransactionImplBase {
 			throws InvalidParamException;
 
 	public static TransactionImplBase narrowCast(Object o) {
-		return new TransactionProxy((ObjectRef) o);
+		return new TransactionProxy(ObjectRef.fromObjectRep(o));
 	}
 }

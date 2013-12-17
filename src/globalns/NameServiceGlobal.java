@@ -11,17 +11,22 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 
-	private static final ConfigReader cr = ConfigReader.getConfigReader("global_nameservice.config");
+	private static final ConfigReader cr = ConfigReader
+			.getConfigReader("global_nameservice.config");
 	private static final int defaultPort = cr.readInt("DEFAULT_GLOBAL_NS_PORT");
-	private static final ILogger logger = Logger.getLogger(cr.read("LOG_METHOD"));
+	private static final ILogger logger = Logger.getLogger(cr
+			.read("LOG_METHOD"));
 
 	public static void main(String[] args) {
 		Integer port = (args.length > 0) ? Integer.parseInt(args[0])
 				: defaultPort;
-		logger.log("NameServiceGlobal gestartet auf Port " + port.toString() + ", maximal " + cr.readInt("MAX_CLIENTS") + " Clients m�glich");
+		logger.log("NameServiceGlobal gestartet auf Port " + port.toString()
+				+ ", maximal " + cr.readInt("MAX_CLIENTS") + " Clients m�glich");
 		NameServiceGlobal nsg = null;
 		try {
 			nsg = new NameServiceGlobal(port);
@@ -44,9 +49,9 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 	}
 
 	private final ServerSocket s;
-	private final Map<String, Object> objects = new ConcurrentHashMap<String, Object>();
+	private final Map<String, String> objects = new ConcurrentHashMap<String, String>();
 	private int remainingClients = cr.readInt("MAX_CLIENTS");
-	
+
 	public NameServiceGlobal(int port) throws IOException {
 		s = new ServerSocket(port);
 	}
@@ -74,36 +79,28 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 		}
 		logger.log("NameServiceGlobal: Verbindung beendet");
 	}
-
-	public void rebind(Object servant, String name) {
-		objects.put(name, servant);
-	}
-
-	public Object resolve(String name) {
-		return objects.get(name);
-	}
-
-	public MethodReturn call(MethodCall mc) {
+	
+	public String call(String mc) {
 		logger.log(mc.toString());
-		try {
-			switch (mc.method) {
-			case "resolve":
-				return new MethodReturn(objects.get(mc.id));
-			case "rebind":
-				objects.put(mc.id, mc.args[0]);
-				return new MethodReturn(null);
+		Pattern p = Pattern.compile("^(.*);(.*);(.*)$");
+		Matcher m = p.matcher(mc);
+		if (m.matches()) 
+		{
+			String method = m.group(1);
+			String id = m.group(2);
+			String arg = m.group(3);
+			switch (method) 
+			{
+			case "resolve": return objects.get(id);
+			case "rebind": objects.put(id, arg);
 			}
-		} catch (Exception e) {
 		}
-
-		return new MethodReturn(new RuntimeException("Methode nicht gefunden: "
-				+ mc.method));
+		return null;
 	}
 
 	@Override
 	public void increaseCounter() {
 		remainingClients++;
-
 	}
 
 	@Override
@@ -126,10 +123,10 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 			try {
 				ObjectInputStream oin = new ObjectInputStream(
 						s.getInputStream());
-				MethodCall mc = (MethodCall) oin.readObject();
-				logger.log(mc.toString());
-				MethodReturn mr = call(mc);
-				logger.log(mr.toString());
+				String mc = (String) oin.readObject();
+				logger.log(mc);
+				String mr = call(mc);
+				logger.log(mr);
 				OutputStream out = s.getOutputStream();
 				ObjectOutputStream oout = new ObjectOutputStream(out);
 				oout.writeObject(mr);
