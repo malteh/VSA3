@@ -55,6 +55,7 @@ public class ObjectBrokerTask extends Thread {
 		try {
 			this.interrupt();
 			server.close();
+			this.interrupt();
 		} catch (Exception e) {
 		}
 	}
@@ -96,10 +97,11 @@ public class ObjectBrokerTask extends Thread {
 				out.close();
 				oin.close();
 				s.close();
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (Exception e) {
 				LogProxy.log(this.getClass(), e.getLocalizedMessage());
 			}
 			nsg.increaseCounter();
+			this.interrupt();
 		}
 	}
 }
