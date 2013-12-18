@@ -27,6 +27,11 @@ public class TransactionSkeleton implements ISkeleton {
 			} catch (InvalidParamException e) {
 				return new MethodReturn(e);
 			}
+			catch (Exception e) {
+				if (e instanceof NullPointerException)
+					return new MethodReturn(new InvalidParamException("Account nicht gefunden"));
+				return new MethodReturn(e);
+			}
 			return new MethodReturn(null);
 		case "withdraw":
 			double amount2 = (double) mc.args[1];
@@ -35,11 +40,18 @@ public class TransactionSkeleton implements ISkeleton {
 			} catch (InvalidParamException | OverdraftException e) {
 				return new MethodReturn(e);
 			}
+			catch (Exception e) {
+				if (e instanceof NullPointerException)
+					return new MethodReturn(new InvalidParamException("Account nicht gefunden"));
+				return new MethodReturn(e);
+			}
 			return new MethodReturn(null);
 		case "getBalance":
 			try {
 				return new MethodReturn(base.getBalance(accountId));
-			} catch (InvalidParamException e) {
+			} catch (Exception e) {
+				if (e instanceof NullPointerException)
+					return new MethodReturn(new InvalidParamException("Account nicht gefunden"));
 				return new MethodReturn(e);
 			}
 		}

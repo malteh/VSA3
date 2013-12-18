@@ -35,7 +35,7 @@ public class AccountProxy extends AccountImplBase implements Serializable, IProx
 		MethodCall mc = new MethodCall(ref.id, "getBalance", new Object[0]);
 		MethodReturn mr = ObjectBroker.call(mc, getObjectRef());
 		if (mr.exception != null) {
-			throw (RuntimeException) mr.exception;
+			throw new RuntimeException(mr.exception.getMessage());
 		}
 		return (double) mr.value;
 	}

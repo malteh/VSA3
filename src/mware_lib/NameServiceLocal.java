@@ -42,9 +42,6 @@ public class NameServiceLocal extends NameService {
 		if (!objects.containsKey(name)) {
 			try {
 				Object mr = conn.sendReceive("resolve;" + name + ";");
-				if (mr == null) {
-					throw new RuntimeException("resolve(name) nicht m�glich");
-				}
 				objects.put(name, mr);
 			} catch (IOException e) {
 				throw new RuntimeException("resolve nicht m�glich");

@@ -21,6 +21,7 @@ public class ObjectBrokerTask extends Thread {
 		server = getNextFreeSocket();
 	}
 
+	// http://stackoverflow.com/questions/2675362/how-to-find-an-available-port
 	private ServerSocket getNextFreeSocket() throws IOException {
 		for (int i = 2000; i < 65000; i++) {
 			try {

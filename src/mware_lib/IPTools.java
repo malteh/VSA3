@@ -6,6 +6,7 @@ import java.util.Enumeration;
 public class IPTools {
 	public static String getIP() throws SocketException {
 		String ret = "";
+		// http://stackoverflow.com/questions/8083479/java-getting-my-ip-address
 		Enumeration<?> e = NetworkInterface.getNetworkInterfaces();
 		while (e.hasMoreElements()) {
 			NetworkInterface n = (NetworkInterface) e.nextElement();
