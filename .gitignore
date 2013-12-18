@@ -3,4 +3,4 @@
 *.war
 *.ear
 .project
-*.log
+*.log*
