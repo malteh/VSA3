@@ -19,13 +19,11 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 	private static final ConfigReader cr = ConfigReader
 			.getConfigReader("global_nameservice.config");
 	private static final int defaultPort = cr.readInt("DEFAULT_GLOBAL_NS_PORT");
-	private static final ILogger logger = Logger.getLogger(cr
-			.read("LOG_METHOD"));
 
 	public static void main(String[] args) {
 		Integer port = (args.length > 0) ? Integer.parseInt(args[0])
 				: defaultPort;
-		logger.log("NameServiceGlobal: gestartet auf Port " + port.toString()
+		LogProxy.log(NameServiceGlobal.class, "NameServiceGlobal: gestartet auf Port " + port.toString()
 				+ ", maximal " + cr.readInt("MAX_CLIENTS") + " Clients m�glich");
 		NameServiceGlobal nsg = null;
 		try {
@@ -36,7 +34,7 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 		}
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println("GNS - ENTER zum beenden");
+		LogProxy.log(NameServiceGlobal.class, "GNS - ENTER zum beenden");
 		try {
 			br.readLine();
 		} catch (IOException e) {
@@ -77,7 +75,7 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 			s.close();
 		} catch (Exception e) {
 		}
-		logger.log("NameServiceGlobal: beendet");
+		LogProxy.log(NameServiceGlobal.class, "NameServiceGlobal: beendet");
 	}
 
 	public String call(String mc) {
@@ -123,9 +121,9 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 				ObjectInputStream oin = new ObjectInputStream(
 						s.getInputStream());
 				String mc = (String) oin.readObject();
-				logger.log("GNS - Eingehende Nachricht: " + mc);
+				LogProxy.log(NameServiceGlobal.class, "GNS - Eingehende Nachricht: " + mc);
 				String mr = call(mc);
-				logger.log("GNS - Ausgehende Nachricht: " + mr);
+				LogProxy.log(NameServiceGlobal.class, "GNS - Ausgehende Nachricht: " + mc);
 				OutputStream out = s.getOutputStream();
 				ObjectOutputStream oout = new ObjectOutputStream(out);
 				oout.writeObject(mr);
@@ -133,7 +131,7 @@ public class NameServiceGlobal extends Thread implements INameServiceGlobal {
 				oin.close();
 				s.close();
 			} catch (IOException | ClassNotFoundException e) {
-				logger.log("GNS - Exception: " + e.getLocalizedMessage());
+				LogProxy.log(NameServiceGlobal.class, "GNS - Exception: " + e.getLocalizedMessage());
 			}
 			nsg.increaseCounter();
 		}

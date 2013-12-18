@@ -11,8 +11,6 @@ public class ObjectBrokerTask extends Thread {
 
 	private static final ConfigReader cr = ConfigReader
 			.getConfigReader("middleware.config");
-	private static final ILogger logger = Logger.getLogger(cr
-			.read("LOG_METHOD"));
 
 	private int remainingClients = cr.readInt("MAX_CLIENTS");
 	private final ObjectBroker ob;
@@ -46,7 +44,7 @@ public class ObjectBrokerTask extends Thread {
 					ReceiverThread r = new ReceiverThread(s, this);
 					r.start();
 				} catch (IOException e) {
-					logger.log(e.getMessage());
+					LogProxy.log(this.getClass(), e.getLocalizedMessage());
 				}
 			}
 		}
@@ -85,11 +83,11 @@ public class ObjectBrokerTask extends Thread {
 				ObjectInputStream oin = new ObjectInputStream(
 						s.getInputStream());
 				MethodCall mc = (MethodCall) oin.readObject();
-				logger.log("ObjectBrokerTask: Call: " + mc.toString());
+				LogProxy.log(this.getClass(), "ObjectBrokerTask: Call: " + mc.toString());
 				ISkeleton ip = ((IProxy) ob.getNameService().resolve(mc.id))
 						.toSkeleton();
 				MethodReturn mr = ip.call(mc);
-				logger.log("ObjectBrokerTask: Return: " + mr.toString());
+				LogProxy.log(this.getClass(), "ObjectBrokerTask: Return: " + mr.toString());
 				OutputStream out = s.getOutputStream();
 				ObjectOutputStream oout = new ObjectOutputStream(out);
 				oout.writeObject(mr);
@@ -97,7 +95,7 @@ public class ObjectBrokerTask extends Thread {
 				oin.close();
 				s.close();
 			} catch (IOException | ClassNotFoundException e) {
-				logger.log(e.getLocalizedMessage());
+				LogProxy.log(this.getClass(), e.getLocalizedMessage());
 			}
 			nsg.increaseCounter();
 		}

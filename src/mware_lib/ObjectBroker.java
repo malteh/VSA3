@@ -8,10 +8,6 @@ import java.io.IOException;
  */
 public class ObjectBroker {
 
-	private static final ConfigReader cr = ConfigReader
-			.getConfigReader("middleware.config");
-	private static final ILogger logger = Logger.getLogger(cr
-			.read("LOG_METHOD"));
 	private static ObjectBroker objectBroker = null;
 
 	private final NameService nameService;
@@ -36,7 +32,7 @@ public class ObjectBroker {
 			}
 		conn = new Connection(serviceName, port);
 		this.nameService = new NameServiceLocal(conn, obPort);
-		logger.log(String.format("ObjectBroker auf Port %s gestartet", obPort));
+		LogProxy.log(this.getClass(), String.format("ObjectBroker auf Port %s gestartet", obPort));
 	}
 
 	/** * @return an Implementation for a local NameService */
@@ -73,11 +69,11 @@ public class ObjectBroker {
 		IConnection c = new Connection(ref.host, ref.port);
 		MethodReturn mr;
 		try {
-			logger.log(String.format("ObjectBroker: %s an %s gesendet", method,
-					ref));
+			LogProxy.log(ObjectBroker.class, String.format("ObjectBroker: %s an %s gesendet", method,
+							ref));
 			mr = (MethodReturn) c.sendReceive(method);
-			logger.log(String.format("ObjectBroker: %s von %s empfangen", mr,
-					ref));
+			LogProxy.log(ObjectBroker.class, String.format("ObjectBroker: %s von %s empfangen",
+									mr, ref));
 		} catch (IOException e) {
 			mr = new MethodReturn(e);
 		}
