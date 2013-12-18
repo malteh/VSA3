@@ -1,4 +1,4 @@
-package demo;
+package local_test;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

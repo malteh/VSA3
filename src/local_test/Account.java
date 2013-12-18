@@ -1,4 +1,4 @@
-package demo;
+package local_test;
 
 import mware_lib.IProxy;
 import mware_lib.ObjectRef;

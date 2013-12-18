@@ -60,7 +60,6 @@ public class ObjectBrokerTask extends Thread {
 
 	public void increaseCounter() {
 		remainingClients++;
-
 	}
 
 	public void decreaseCounter() {
@@ -83,11 +82,13 @@ public class ObjectBrokerTask extends Thread {
 				ObjectInputStream oin = new ObjectInputStream(
 						s.getInputStream());
 				MethodCall mc = (MethodCall) oin.readObject();
-				LogProxy.log(this.getClass(), "ObjectBrokerTask: Call: " + mc.toString());
+				LogProxy.log(this.getClass(),
+						"ObjectBrokerTask: Call: " + mc.toString());
 				ISkeleton ip = ((IProxy) ob.getNameService().resolve(mc.id))
 						.toSkeleton();
 				MethodReturn mr = ip.call(mc);
-				LogProxy.log(this.getClass(), "ObjectBrokerTask: Return: " + mr.toString());
+				LogProxy.log(this.getClass(),
+						"ObjectBrokerTask: Return: " + mr.toString());
 				OutputStream out = s.getOutputStream();
 				ObjectOutputStream oout = new ObjectOutputStream(out);
 				oout.writeObject(mr);

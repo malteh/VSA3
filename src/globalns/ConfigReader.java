@@ -2,6 +2,7 @@ package globalns;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,16 +14,12 @@ public class ConfigReader {
 
 	private Properties prop = null;
 
-	private ConfigReader(String filename) {
+	private ConfigReader(String filename) throws IOException {
 		Reader r;
-		try {
-			r = new FileReader(new File(filename));
-			prop = new Properties();
-			prop.load(r);
-			r.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		r = new FileReader(new File(filename));
+		prop = new Properties();
+		prop.load(r);
+		r.close();
 		crMap.put(filename, this);
 	}
 
@@ -34,7 +31,7 @@ public class ConfigReader {
 		return Integer.parseInt(prop.getProperty(key));
 	}
 
-	public static ConfigReader getConfigReader(String filename) {
+	public static ConfigReader getConfigReader(String filename) throws IOException {
 		if (!crMap.containsKey(filename)) {
 			crMap.put(filename, new ConfigReader(filename));
 		}
