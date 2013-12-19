@@ -26,3 +26,8 @@ Geldautomat:
 ```java -cp geldautomat.jar:cash_access.jar:mware_lib.jar geldautomat.Geldautomat $GLOBAL_NS_HOST $GLOBAL_NS_PORT NDEA-1 -v```
 
 Für die Middleware ist eine ```middleware.config``` mitgeliefert. Diese muss sich im Verzeichnis des JARs befinden.
+
+
+Allgemein
+---------
+Damit die Testanwendug funktioniert, wird ein "log" Ordner erwartet, in dem die Logdateien dann erzeugt werden.
