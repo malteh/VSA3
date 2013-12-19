@@ -16,7 +16,8 @@ public class TransactionSkeleton implements ISkeleton {
 
 	@Override
 	public MethodReturn call(MethodCall mc) {
-		LogProxy.log(base.getClass(), base.getClass().getName() + ":" + mc.toString());
+		LogProxy.log(base.getClass(),
+				base.getClass().getName() + ":" + mc.toString());
 		String accountId = (String) mc.args[0];
 		switch (mc.method) {
 		case "deposit":
@@ -26,11 +27,9 @@ public class TransactionSkeleton implements ISkeleton {
 				base.deposit(accountId, amount1);
 			} catch (InvalidParamException e) {
 				return new MethodReturn(e);
-			}
-			catch (Exception e) {
-				if (e instanceof NullPointerException)
-					return new MethodReturn(new InvalidParamException("Account nicht gefunden"));
-				return new MethodReturn(e);
+			} catch (Exception e) {
+				return new MethodReturn(new InvalidParamException(
+						"TransactionSkeleton:Account nicht gefunden"));
 			}
 			return new MethodReturn(null);
 		case "withdraw":
@@ -39,20 +38,17 @@ public class TransactionSkeleton implements ISkeleton {
 				base.withdraw(accountId, amount2);
 			} catch (InvalidParamException | OverdraftException e) {
 				return new MethodReturn(e);
-			}
-			catch (Exception e) {
-				if (e instanceof NullPointerException)
-					return new MethodReturn(new InvalidParamException("Account nicht gefunden"));
-				return new MethodReturn(e);
+			} catch (Exception e) {
+				return new MethodReturn(new InvalidParamException(
+						"TransactionSkeleton:Account nicht gefunden"));
 			}
 			return new MethodReturn(null);
 		case "getBalance":
 			try {
 				return new MethodReturn(base.getBalance(accountId));
 			} catch (Exception e) {
-				if (e instanceof NullPointerException)
-					return new MethodReturn(new InvalidParamException("Account nicht gefunden"));
-				return new MethodReturn(e);
+				return new MethodReturn(new InvalidParamException(
+						"TransactionSkeleton:Account nicht gefunden"));
 			}
 		}
 		return new MethodReturn(new RuntimeException("Methode nicht gefunden: "

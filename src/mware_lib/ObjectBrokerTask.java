@@ -55,7 +55,6 @@ public class ObjectBrokerTask extends Thread {
 		try {
 			this.interrupt();
 			server.close();
-			this.interrupt();
 		} catch (Exception e) {
 		}
 	}

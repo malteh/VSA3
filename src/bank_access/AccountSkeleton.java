@@ -22,10 +22,8 @@ public class AccountSkeleton implements ISkeleton {
 			double amount = (double) mc.args[0];
 			try {
 				base.transfer(amount);
-			} catch (OverdraftException e) {
-				return new MethodReturn(e);
-			} catch (RuntimeException e) {
-				return new MethodReturn(e);
+			} catch (Exception e) {
+				return new MethodReturn(new OverdraftException(e.getMessage()));
 			}
 			return new MethodReturn(null);
 		}

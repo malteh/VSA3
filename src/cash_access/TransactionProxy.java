@@ -33,12 +33,7 @@ public class TransactionProxy extends TransactionImplBase implements Serializabl
 			throws InvalidParamException {
 		MethodCall mc = new MethodCall(ref.id, "deposit", new Object[] {accountId,amount});
 		MethodReturn mr = ObjectBroker.call(mc, getObjectRef());
-		if (mr == null) throw new InvalidParamException("Account nicht gefunden!");
-		if (mr.exception != null && mr.exception instanceof InvalidParamException) {
-			throw (InvalidParamException) mr.exception;
-		} else if (mr.exception != null) {
-			throw new RuntimeException(mr.exception.getMessage());
-		}
+		if (mr == null || mr.exception != null) throw new InvalidParamException("TransactionProxy:Account nicht gefunden!");
 	}
 
 	@Override
@@ -46,25 +41,23 @@ public class TransactionProxy extends TransactionImplBase implements Serializabl
 			throws InvalidParamException, OverdraftException {
 		MethodCall mc = new MethodCall(ref.id, "withdraw", new Object[] {accountId, amount});
 		MethodReturn mr = ObjectBroker.call(mc, getObjectRef());
-		if (mr == null) throw new InvalidParamException("Account nicht gefunden!");
-		if (mr.exception != null && mr.exception instanceof InvalidParamException) {
-			throw (InvalidParamException) mr.exception;
-		} else if (mr.exception != null) {
-			throw new RuntimeException(mr.exception.getMessage());
+		if (mr.exception != null) {
+			try {
+				throw mr.exception;
+			} catch (InvalidParamException | OverdraftException  e) {
+				throw e;
+			} catch (Exception e) {
+				throw new RuntimeException(mr.exception.getMessage());
+			}
 		}
-		
+		if (mr == null || mr.exception != null) throw new InvalidParamException("TransactionProxy2:Account nicht gefunden!");
 	}
 
 	@Override
 	public double getBalance(String accountId) throws InvalidParamException {
 		MethodCall mc = new MethodCall(ref.id, "getBalance", new Object[] {accountId});
 		MethodReturn mr = ObjectBroker.call(mc, getObjectRef());
-		if (mr == null) throw new InvalidParamException("Account nicht gefunden!");
-		if (mr.exception instanceof InvalidParamException)
-		
-		if (mr.exception != null) {
-			throw new RuntimeException(mr.exception.getMessage());
-		}
+		if (mr == null || mr.exception != null) throw new InvalidParamException("TransactionProxy:Account nicht gefunden!");
 		return (double) mr.value;
 	}
 
